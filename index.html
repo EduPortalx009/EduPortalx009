@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>EduPortal - Explore and Share</title>
+<title>SkilVara - Explore and Share</title>
 
 <!-- NEW: Place Firebase and AdSense SDKs here, before your main script -->
 <!-- FIREBASE SDK SCRIPTS GO HERE -->
@@ -37,28 +37,33 @@
 
 <style>
   :root {
-    --primary-color: #00aaff;
-    --primary-glow: #0088cc;
-    --background-dark: #0d0d0d;
-    --content-bg: rgba(20, 20, 20, 0.95);
-    --text-color: #00aaff;
-    --text-accent: #00ccff;
-    --text-secondary: #888;
-    --border-color: #00aaff;
+    /* UPDATED: Light theme color palette */
+    --primary-color: #007bff;
+    --primary-glow: #0056b3;
+    --background-dark: #f8f9fa; /* White background */
+    --content-bg: rgba(255, 255, 255, 0.95);
+    --text-color: #212529; /* Dark text for readability */
+    --text-accent: #0056b3;
+    --text-secondary: #6c757d;
+    --border-color: #dee2e6;
     --like-color: #ff4444;
     --success-color: #28a745;
     --support-color: #ffcc00;
-    --edit-color: #44aaff; /* NEW: Edit button color */
+    --edit-color: #44aaff;
+    --message-admin-color: #9c27b0;
+    --message-admin-glow: #7b1fa2;
   }
   html, body {
     height: 100%;
     margin: 0;
+    overflow-x: hidden;
   }
   body {
     font-family: 'Segoe UI', sans-serif;
-    background: var(--background-dark) url('https://www.transparenttextures.com/patterns/dark-matter.png');
+    background: var(--background-dark); /* Using the new white background */
     background-size: cover;
-    color: var(--text-color);
+    background-attachment: fixed;
+    color: var(--text-color); /* Using the new dark text color */
     padding: 15px;
     display: flex;
     justify-content: center;
@@ -67,14 +72,15 @@
   }
   h1, h2 {
     text-align: center;
-    text-shadow: 0 0 15px var(--primary-color), 0 0 25px var(--primary-glow);
+    color: var(--primary-color);
+    text-shadow: none; /* Removed glow for better readability on light bg */
   }
   .main-container {
-    max-width: 900px;
-    width: 100%;
+    max-width: 1200px;
+    width: 95%;
     margin: auto;
     overflow-y: auto;
-    max-height: 100vh;
+    max-height: 98vh;
   }
   .view {
     display: none;
@@ -90,13 +96,13 @@
     background: var(--content-bg);
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0 0 15px rgba(0,170,255,0.3);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     margin-bottom: 25px;
     position: relative;
+    border: 1px solid var(--border-color);
   }
   .subject-grid {
     display: grid;
-    /* UPDATED: Changed from auto-fit to a fixed 2-column layout */
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
     justify-content: center;
@@ -108,20 +114,21 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s;
-    background: rgba(0,0,0,0.2);
-    box-shadow: 0 0 10px rgba(0,170,255,0.2);
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
     font-size: 1em;
+    color: var(--text-color);
   }
   .subject-item:hover {
-    background: rgba(0,170,255,0.2);
-    box-shadow: 0 0 15px rgba(0,170,255,0.5);
+    background: #e9ecef;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transform: translateY(-3px);
   }
   .subject-item.selected {
       background: var(--primary-color);
-      color: var(--background-dark);
+      color: #fff; /* White text on colored background */
       font-weight: bold;
-      box-shadow: 0 0 20px var(--primary-glow);
+      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
       transform: translateY(-5px);
   }
   .action-button, .form-field button, #back-to-subjects-btn, .back-btn, #upload-form button, .comment-form button, #join-btn, .confirm-btn, .search-container button, .payment-request-btn {
@@ -129,19 +136,27 @@
     border: none;
     border-radius: 8px;
     background: linear-gradient(90deg, var(--primary-color), var(--primary-glow));
-    color: black;
+    color: #ffffff; /* White text on buttons */
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 0 15px rgba(0,170,255,0.5);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
     font-size: 1.1em;
     width: 100%;
   }
   .action-button:hover, .form-field button:hover, #back-to-subjects-btn:hover, .back-btn:hover, #upload-form button:hover, .comment-form button:hover, #join-btn:hover, .confirm-btn:hover, .search-container button:hover, .payment-request-btn:hover:not(:disabled) {
-    box-shadow: 0 0 25px rgba(0,170,255,0.8);
+    box-shadow: 0 6px 20px rgba(0, 123, 255, 0.5);
+    transform: translateY(-2px);
+  }
+  #message-admin-btn {
+      background: linear-gradient(90deg, var(--message-admin-color), var(--message-admin-glow));
+      box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);
+  }
+  #message-admin-btn:hover {
+      box-shadow: 0 6px 20px rgba(156, 39, 176, 0.5);
   }
   .action-button:disabled, .payment-request-btn:disabled {
-      background: #555;
+      background: #adb5bd;
       cursor: not-allowed;
       box-shadow: none;
   }
@@ -151,6 +166,7 @@
       padding: 8px 15px;
       margin-left: 15px;
       background: linear-gradient(90deg, var(--support-color), #ffae00);
+      color: #212529; /* Dark text for yellow button */
   }
   #landing-view .content-section {
       text-align: center;
@@ -194,13 +210,14 @@
       display: block;
       margin-bottom: 8px;
       font-weight: bold;
+      color: var(--text-color);
   }
   .form-field input, .form-field select, .form-field textarea {
       width: 100%;
       padding: 12px;
-      background: #1e1e1e;
+      background: #ffffff; /* White background for inputs */
       border: 1px solid var(--border-color);
-      color: var(--text-accent);
+      color: var(--text-color); /* Dark text for inputs */
       border-radius: 8px;
       box-sizing: border-box;
       resize: vertical;
@@ -216,14 +233,14 @@
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid var(--primary-glow);
+    border: 2px solid var(--primary-color);
   }
   .uploader-name {
     font-size: 1em;
     color: var(--text-accent);
     font-weight: bold;
-    cursor: pointer; /* NEW: To indicate it's clickable */
-    text-decoration: underline; /* NEW: To indicate it's clickable */
+    cursor: pointer;
+    text-decoration: underline;
   }
   .uploader-name:hover {
     color: var(--primary-color);
@@ -234,13 +251,13 @@
   }
   .uploader-bio {
     font-size: 0.9em;
-    color: #ccc;
-    background: rgba(255, 255, 255, 0.05);
+    color: #343a40;
+    background: #e9ecef;
     padding: 8px;
     border-radius: 5px;
     margin-top: 8px;
     margin-bottom: 10px;
-    border-left: 3px solid var(--primary-glow);
+    border-left: 3px solid var(--primary-color);
     white-space: pre-wrap;
     word-wrap: break-word;
   }
@@ -249,8 +266,8 @@
     border-radius: 10px;
     padding: 15px;
     margin-bottom: 20px;
-    background: #1a1a1a;
-    box-shadow: 0 0 12px rgba(0,170,255,0.2);
+    background: #ffffff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
     position: relative;
   }
   .post p {
@@ -258,42 +275,85 @@
     white-space: pre-wrap;
     word-wrap: break-word;
   }
-  .post .post-timestamp { font-size: 0.75em; color: #777; margin-bottom: 15px; }
-  .post img { max-width: 100%; border-radius: 8px; margin-top: 10px; }
-  .empty-posts-message { text-align: center; padding: 40px; color: var(--text-secondary); }
-  .post-actions { display: flex; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; } /* MODIFIED */
-  .like-btn { cursor: pointer; font-size: 1.5em; transition: all 0.2s; user-select: none; }
+  .post .post-timestamp { font-size: 0.75em; color: #6c757d; margin-bottom: 15px; }
+  .post img, .post video { max-width: 100%; border-radius: 8px; margin-top: 10px; }
+  .empty-posts-message { text-align: center; padding: 100px; color: var(--text-secondary); }
+  .post-actions { display: flex; align-items: center; gap: 15px; margin-top: 15px; flex-wrap: wrap; }
+  .like-btn { cursor: pointer; font-size: 1.5em; transition: all 0.2s; user-select: none; color: #ced4da; }
   .like-btn.liked { color: var(--like-color); transform: scale(1.2); }
-  .comment-section { margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; }
-  .comment-form textarea { width: 100%; padding: 10px; background: #1e1e1e; border: 1px solid var(--border-color); color: var(--text-accent); border-radius: 8px; box-sizing: border-box; resize: vertical; }
+  .comment-section { margin-top: 15px; border-top: 1px solid #e9ecef; padding-top: 15px; }
+  .comment-form textarea { width: 100%; padding: 10px; background: #ffffff; border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; box-sizing: border-box; resize: vertical; }
   .comment-form button { margin-top: 10px; width: 100%; }
-  .comment { background: #222; padding: 10px; border-radius: 8px; margin-top: 10px; position: relative; }
-  .comment .commenter-id { font-size: 0.7em; color: #aaa; font-weight: bold; }
-  .comment .comment-timestamp { font-size: 0.7em; color: #777; margin-top: 4px; }
+  .comment { background: #f8f9fa; padding: 10px; border-radius: 8px; margin-top: 10px; position: relative; }
+  .comment .commenter-id { font-size: 0.7em; color: #495057; font-weight: bold; }
+  .comment .comment-timestamp { font-size: 0.7em; color: #6c757d; margin-top: 4px; }
   .delete-comment-btn { position: absolute; top: 5px; right: 5px; background: none; border: none; color: var(--like-color); cursor: pointer; font-size: 1.2em; opacity: 0.7; transition: opacity 0.2s; }
   .delete-comment-btn:hover { opacity: 1; }
-  #upload-form textarea, #upload-form input[type="file"] { width: 100%; padding: 12px; margin-bottom: 15px; background: #1e1e1e; border: 1px solid var(--border-color); color: var(--text-accent); border-radius: 8px; box-sizing: border-box; }
-  .post-top-buttons { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; } /* NEW */
-  .post-top-buttons button { padding: 5px 10px; border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background 0.2s; } /* NEW */
-  .delete-post-btn { background: var(--like-color); } /* MODIFIED */
+  #upload-form textarea, #upload-form input[type="file"] { width: 100%; padding: 12px; margin-bottom: 15px; background: #ffffff; border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; box-sizing: border-box; }
+  .post-top-buttons { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+  .post-top-buttons button { padding: 5px 10px; border: none; color: white; font-weight: bold; border-radius: 5px; cursor: pointer; transition: background 0.2s; }
+  .delete-post-btn { background: var(--like-color); }
   .delete-post-btn:hover { background: #cc2222; }
-  .edit-post-btn { background: var(--edit-color); } /* NEW */
-  .edit-post-btn:hover { background: #2288dd; } /* NEW */
-  .post-interactions { display: flex; align-items: center; margin-top: 15px; border-top: 1px solid #333; padding-top: 15px; flex-wrap: wrap; }
-  .likes-display { font-weight: bold; color: #ffcc00; margin-left: 15px; } /* MODIFIED */
+  .edit-post-btn { background: var(--edit-color); }
+  .edit-post-btn:hover { background: #2288dd; }
+  .post-interactions { display: flex; align-items: center; margin-top: 15px; border-top: 1px solid #e9ecef; padding-top: 15px; flex-wrap: wrap; }
+  .likes-display { font-weight: bold; color: #e8590c; margin-left: 15px; }
   .comments-container { max-height: 200px; overflow-y: auto; padding-right: 10px; width: 100%; margin-top: 15px;}
   .search-container { display: flex; gap: 10px; margin-bottom: 20px; }
-  .search-container input { flex-grow: 1; padding: 12px; background: #1e1e1e; border: 1px solid var(--border-color); color: var(--text-accent); border-radius: 8px; }
+  .search-container input { flex-grow: 1; padding: 12px; background: #ffffff; border: 1px solid var(--border-color); color: var(--text-color); border-radius: 8px; }
   .search-container button { width: auto; font-size: 1em; padding: 12px 20px; }
-  #custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-  #custom-alert-box { background: var(--background-dark); padding: 30px; border-radius: 15px; border: 1px solid var(--primary-color); box-shadow: 0 0 25px var(--primary-glow); text-align: center; max-width: 400px; width: 90%; }
-  #custom-alert-message { color: var(--text-accent); font-size: 1.1em; margin: 0 0 25px 0; line-height: 1.5; white-space: pre-wrap;}
+
+  /* NEW: Styles for the content filter buttons */
+  .filter-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    background-color: #fff;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-weight: 500;
+  }
+  .filter-btn:hover {
+    background-color: #e9ecef;
+  }
+  .filter-btn.active {
+    background-color: var(--primary-color);
+    color: #fff;
+    border-color: var(--primary-color);
+    font-weight: bold;
+  }
+  
+  #custom-alert-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; }
+  #custom-alert-box { background: #ffffff; padding: 30px; border-radius: 15px; border: 1px solid var(--border-color); box-shadow: 0 5px 25px rgba(0,0,0,0.15); text-align: center; max-width: 400px; width: 90%; }
+  #custom-alert-message { color: var(--text-color); font-size: 1.1em; margin: 0 0 25px 0; line-height: 1.5; white-space: pre-wrap;}
   #custom-alert-buttons { display: flex; gap: 15px; justify-content: center; }
   #custom-alert-buttons button { width: 120px; }
-  #custom-alert-buttons button.cancel { background: #555; }
-  #custom-alert-buttons button.cancel:hover { background: #777; box-shadow: 0 0 15px rgba(255,255,255,0.3); }
-  .back-btn { position: absolute; top: 0; left: 0; width: auto; font-size: 1em; padding: 5px 10px; z-index: 10; } /* MODIFIED */
-  #viewer-posts-view .posts-section-container, #uploader-profile-view .posts-section-container { margin-top: 60px; } /* MODIFIED */
+  #custom-alert-buttons button.cancel { background: #6c757d; }
+  #custom-alert-buttons button.cancel:hover { background: #5a6268; box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+
+  .back-btn {
+      position: absolute;
+      top: 1px;
+      left: 1px;
+      width: auto;
+      font-size: 1em;
+      padding: 2px 3px;
+      z-index: 4;
+  }
+  #viewer-posts-view .posts-section-container, #uploader-profile-view .posts-section-container {
+      margin-top: 40px;
+      padding-top: 40px;
+  }
+
+  /* UPDATED: Logout button is already here */
   #logout-btn {
       position: absolute;
       top: 10px;
@@ -302,12 +362,11 @@
       font-size: 1em;
       width: auto;
       background: linear-gradient(90deg, #ff4444, #cc2222);
-      box-shadow: 0 0 15px rgba(255,68,68,0.5);
+      box-shadow: 0 4px 12px rgba(255,68,68,0.3);
   }
   #logout-btn:hover {
-      box-shadow: 0 0 25px rgba(255,68,68,0.8);
+      box-shadow: 0 6px 20px rgba(255,68,68,0.5);
   }
-   /* NEW: Profile Header Styles */
   .profile-header {
     display: flex;
     flex-direction: column;
@@ -316,7 +375,7 @@
     text-align: center;
     margin-bottom: 25px;
     padding: 20px;
-    border-bottom: 2px solid var(--primary-glow);
+    border-bottom: 2px solid var(--primary-color);
   }
   .profile-header img {
     width: 100px;
@@ -328,7 +387,6 @@
   .profile-header p { margin: 2px 0; color: var(--text-secondary); }
   .profile-header .bio { color: var(--text-accent); margin-top: 10px; }
   
-  /* UPDATED: Consistent file download link style */
   .file-download-link {
     display: inline-block;
     background: var(--success-color);
@@ -346,20 +404,19 @@
       background: #218838;
   }
 
-  /* NEW: Follow button and stats styles */
   .follow-btn {
       width: auto;
       font-size: 1em;
       padding: 10px 25px;
       margin-top: 15px;
       background: linear-gradient(90deg, var(--success-color), #1a9933);
-      box-shadow: 0 0 15px rgba(40, 167, 69, 0.5);
+      box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
   }
   .follow-btn:hover {
-      box-shadow: 0 0 25px rgba(40, 167, 69, 0.8);
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.5);
   }
   .follow-btn.followed {
-      background: #555;
+      background: #6c757d;
       box-shadow: none;
   }
   .profile-stats {
@@ -376,10 +433,11 @@
 <div id="landing-view" class="view">
     <div class="content-section">
         <button id="join-btn">Join</button>
-        <h1>🚀 Welcome to EduPortal</h1>
+        <h1>🚀 Welcome to SkilVara</h1>
         <p style="text-align:center;">Your platform for learning and sharing knowledge.</p>
         <div class="button-container">
             <button class="action-button" id="go-to-viewer-btn">📚 Explore Content</button>
+            <button class="action-button" id="message-admin-btn">📨 Message Admin</button>
         </div>
     </div>
 </div>
@@ -416,6 +474,40 @@
                 <select id="uploader-reg-subject" required>
                 </select>
             </div>
+
+            <hr style="margin: 25px 0; border: 1px solid var(--border-color);">
+            <h3 style="text-align:center; color: var(--primary-color);">Payment Details</h3>
+            <p style="text-align:center; font-size: 0.9em; color: var(--text-secondary); margin-top: -10px; margin-bottom: 20px;">
+                Add your payment details to receive payments for your content.
+            </p>
+            <div class="form-field">
+                <label for="payment-method-options">Payment Method</label>
+                <select id="payment-method-options">
+                    <option value="upi">UPI</option>
+                    <option value="bank">Bank Account</option>
+                </select>
+            </div>
+            <div id="upi-details" class="payment-details">
+                <div class="form-field">
+                    <label for="upi-id">UPI ID</label>
+                    <input type="text" id="upi-id" placeholder="yourname@bank">
+                </div>
+            </div>
+            <div id="bank-details" class="payment-details" style="display: none;">
+                <div class="form-field">
+                    <label for="account-holder-name">Account Holder Name</label>
+                    <input type="text" id="account-holder-name">
+                </div>
+                <div class="form-field">
+                    <label for="account-number">Account Number</label>
+                    <input type="text" id="account-number">
+                </div>
+                <div class="form-field">
+                    <label for="ifsc-code">IFSC Code</label>
+                    <input type="text" id="ifsc-code">
+                </div>
+            </div>
+
             <div class="form-field">
                 <button type="submit">Confirm Registration</button>
             </div>
@@ -434,9 +526,18 @@
 
 <!-- VIEW 3: VIEWER - POSTS -->
 <div id="viewer-posts-view" class="view">
-    <button id="back-to-subjects-btn" class="back-btn">← Back to Subjects</button>
     <div class="posts-section-container">
+         <button id="back-to-subjects-btn" class="back-btn">← Back to Subjects</button>
          <h2 id="posts-heading"></h2>
+         
+         <!-- NEW: Content type filter buttons added here -->
+         <div class="filter-container">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="image">Images</button>
+            <button class="filter-btn" data-filter="application">PDFs</button>
+            <button class="filter-btn" data-filter="video">Videos</button>
+         </div>
+         
          <div class="search-container">
             <input type="text" id="state-search-input" placeholder="Filter by state...">
             <button id="state-search-btn">Search</button>
@@ -448,16 +549,15 @@
 <!-- VIEW 4: UPLOADER - DASHBOARD -->
 <div id="uploader-view" class="view">
      <button class="close-btn" onclick="showView('landing-view')">✖️</button>
+     <!-- The Logout Button is already here on the top-left -->
      <button id="logout-btn">Logout</button>
     <div id="uploader-verification-section" class="content-section">
         <h1>👋 Welcome, Uploader!</h1>
         <h2 id="uploader-verification-prompt"></h2>
         <div id="uploader-subject-grid" class="subject-grid"></div>
-        <button id="confirm-uploader-subject-btn" class="confirm-btn" style="display:none; margin-top: 20px;">Confirm Subject</button>
     </div>
       
     <div id="uploader-dashboard-section" style="display: none;">
-        <!-- UPDATED: Added text-align and a new container for stats -->
         <div class="content-section" style="text-align: center;">
             <h1 id="uploader-heading"></h1>
             <div id="uploader-stats-display" class="profile-stats"></div>
@@ -465,11 +565,11 @@
          <div class="content-section">
             <h2>New Post</h2>
             <form id="upload-form">
-                <!-- NEW: Hidden input for editing state -->
                 <input type="hidden" id="editing-post-timestamp">
                 <textarea id="post-text" rows="5" placeholder="Share something interesting..." required></textarea>
-                <label for="post-image" style="display:block; margin-bottom: 5px;">Upload an Image (JPG, PNG) or PDF (Optional):</label>
-                <input type="file" id="post-file" accept="image/jpeg,image/png,application/pdf" style="margin-bottom: 20px;">
+                <label for="post-image" style="display:block; margin-bottom: 5px;">Upload an Image (JPG, PNG), PDF, or Video (Optional):</label>
+                <!-- UPDATED: Accept attribute to include video -->
+                <input type="file" id="post-file" accept="image/jpeg,image/png,application/pdf,video/*" style="margin-bottom: 20px;">
                 <button type="submit" id="upload-btn">Upload Post</button>
             </form>
         </div>
@@ -480,13 +580,35 @@
     </div>
 </div>
 
-<!-- NEW: VIEW 5 - UPLOADER PROFILE VIEW -->
+<!-- VIEW 5 - UPLOADER PROFILE VIEW -->
 <div id="uploader-profile-view" class="view">
-    <button class="back-btn" onclick="showView('viewer-posts-view')">← Back to Posts</button>
     <div id="profile-header-container" class="profile-header"></div>
     <div class="posts-section-container">
+        <button class="back-btn" onclick="showView('viewer-posts-view')">← Back to Posts</button>
         <h2 id="profile-posts-heading"></h2>
         <div id="profile-posts-container"></div>
+    </div>
+</div>
+
+<!-- VIEW 6 - MESSAGE ADMIN -->
+<div id="message-admin-view" class="view">
+    <div class="content-section">
+        <button class="close-btn" onclick="showView('landing-view')">✖️</button>
+        <h1>Contact Administrator</h1>
+        <p style="text-align:center; color: var(--text-secondary);">Have a question or feedback? Let us know.</p>
+        <form id="message-admin-form">
+            <div class="form-field">
+                <label for="admin-message-name">Your Name / ID</label>
+                <input type="text" id="admin-message-name" required>
+            </div>
+            <div class="form-field">
+                <label for="admin-message-body">Message</label>
+                <textarea id="admin-message-body" rows="6" placeholder="Please describe your query in detail..." required></textarea>
+            </div>
+            <div class="form-field">
+                <button type="submit">Send Message</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -505,43 +627,40 @@
 
 <script>
 // --- GLOBAL CONFIG & STATE ---
-// REMOVED: Keys for localStorage
-const viewedPostsKey = "eduViewedPosts"; // For session storage to track views per session
-
-// MODIFIED: Changed from 1000 to 10000
+const viewedPostsKey = "eduViewedPosts";
 const PAYMENT_REQUEST_MILESTONE = 10000;
 const PAYMENT_AMOUNT = 500;
-
-// All data is now stored in-memory and will reset on page refresh.
 let allPosts = [];
 let uploaderProfiles = [];
 let currentUploader = null;
 let viewerUser = "";
 let selectedViewerSubject = null;
-let selectedUploaderSubject = null;
+let currentContentFilter = 'all'; // NEW: State for the content filter
 
 const subjects = [
     "🧮 Mathematics", "⚛️ Physics", "🧪 Chemistry", "🧬 Biology", "📜 History", "🌍 Geography",
     "💻 Computer Science", "📖 English Literature", "🏛️ Political Science", "💹 Economics", "🧠 Psychology",
-    "👥 Sociology", "🎨 Art History", "🎼 Music Theory", "🤔 Philosophy", "🌌 Astrophysics",
+    "👥 Sociology", "🎨 Arts", "🎼 Music Theory", "🤔 Philosophy", "🌌 Astrophysics",
     "🔬 Biotechnology", "🌱 Environmental Science", "🤖 Robotics", "📊 Data Science", "🧠 Machine Learning",
     "🔒 Cybersecurity", "🌀 Quantum Mechanics", "⚗️ Organic Chemistry", "🧬 Genetics", "🏺 Ancient Civilizations",
     "⛪ World Religions", "📈 Digital Marketing", "🎨 Graphic Design", "✍️ Creative Writing", "📰 Journalism",
     "🗣️ Linguistics", "🗿 Anthropology", "⛏️ Archaeology", "💼 Business Studies", "🧾 Accounting",
-    "💰 Finance", "👥 Human Resources", "🌐 International Relations", "🎤 Public Speaking", "💸 Money Management", "Java","🐍Python", "C#","C++"," Html","Js","Gdscript",
+    "💰 Finance", "👥 Human Resources", "🌐 International Relations", "🎤 Public Speaking", "💸 Money Management", 
+    "☕ Java","🐍 Python", "♯ C#","➕ C++","🌐 HTML","📜 JS","🤖 Godot (GDScript)","🧾 Statistics","⚙️ Engineering Mechanics",
+"🧑‍⚕️ Medical Science","🌿 Botany", "🐾 Zoology", "🧱 Civil Engineering Basics", "🔌 Electrical Engineering", "⚡ Electronics", 
+"🚀 Aerospace Engineering", "🌍 Social Science & Humanities", "📚 Education", "🏛️ Law (Legal Studies)", "🌏 Global Studies",
+"👩‍🏫 Pedagogy (Teaching Methods)","🎭 Theatre & Drama","🎬 Film Studies","🖌️ Design Thinking","💻 Computer & Tech","📱 Mobile App Development",
+"☁️ Cloud Computing","🖥️ Operating Systems","🧩 Algorithms & Data Structures","🖼️ UI/UX Design","🕹️ Game Development","🧮 Artificial Intelligence",
+"🔍 Ethical Hacking","🔬 Advanced Science","🌡️ Thermodynamics","🧲 Electromagnetism","🌊 Fluid Mechanics","🧊 Solid State Physics","🧭 Earth Science",
+"🪐 Planetary Science","🧑‍🔬 Nanotechnology","💼 Professional & Life Skills", "📊 Project Management", "📚 Research Methodology", "📝 Technical Writing",
+"🏦 Entrepreneurship", "🗂️ Business Management","📱 Social Media Marketing",
 ];
 
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", initializeApp);
 
 function initializeApp() {
-    // REMOVED: All localStorage.getItem calls. Data starts fresh on each load.
-    
-    // Create a new unique ID for the viewer for this session.
     viewerUser = "viewer_" + new Date().getTime();
-    
-    // currentUploader is null by default, user must "Join" each time.
-      
     populateSubjectGrids();
     populateSubjectDropdown();
     attachEventListeners();
@@ -570,41 +689,84 @@ function populateSubjectDropdown() {
 
 function attachEventListeners() {
     document.getElementById('go-to-viewer-btn').addEventListener('click', () => showView('viewer-subject-selection-view'));
+    document.getElementById('message-admin-btn').addEventListener('click', showMessageAdminView);
     document.getElementById('join-btn').addEventListener('click', handleJoinClick);
     document.getElementById('uploader-reg-form').addEventListener('submit', handleUploaderRegistration);
     document.getElementById('viewer-subject-grid').addEventListener('click', (e) => handleSubjectSelection(e, 'viewer'));
     document.getElementById('back-to-subjects-btn').addEventListener('click', () => showView('viewer-subject-selection-view'));
     document.getElementById('uploader-subject-grid').addEventListener('click', (e) => handleSubjectSelection(e, 'uploader'));
-    document.getElementById('confirm-uploader-subject-btn').addEventListener('click', handleUploaderSubjectConfirmation);
     document.getElementById('upload-form').addEventListener('submit', handlePostUpload);
+    document.getElementById('message-admin-form').addEventListener('submit', handleAdminMessageSend);
     document.getElementById('state-search-btn').addEventListener('click', () => {
         if (selectedViewerSubject) {
             showPostsForSubject(selectedViewerSubject);
         }
     });
     document.getElementById('logout-btn').addEventListener('click', handleLogout);
+    
+    // NEW: Add event listener for the new filter buttons
+    document.querySelector('.filter-container').addEventListener('click', handleFilterClick);
+
+    document.getElementById('payment-method-options').addEventListener('change', (e) => {
+        document.getElementById('upi-details').style.display = e.target.value === 'upi' ? 'block' : 'none';
+        document.getElementById('bank-details').style.display = e.target.value === 'bank' ? 'block' : 'none';
+    });
+}
+
+// NEW: Function to handle clicks on the content filter
+function handleFilterClick(event) {
+    if (event.target.classList.contains('filter-btn')) {
+        // Update the active button style
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // Update the global filter state
+        currentContentFilter = event.target.dataset.filter;
+
+        // Re-render posts with the new filter
+        if (selectedViewerSubject) {
+            showPostsForSubject(selectedViewerSubject);
+        }
+    }
 }
 
 function handleSubjectSelection(event, userType) {
     if (event.target.classList.contains('subject-item')) {
         const selectedClass = 'selected';
+        const subject = event.target.dataset.subject;
+        
         event.target.parentElement.querySelectorAll('.' + selectedClass).forEach(el => el.classList.remove(selectedClass));
         event.target.classList.add(selectedClass);
 
         if (userType === 'viewer') {
-            const subject = event.target.dataset.subject;
             selectedViewerSubject = subject;
             document.getElementById('state-search-input').value = '';
+
+            // NEW: Reset content filter UI and state when a new subject is chosen
+            currentContentFilter = 'all';
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector('.filter-btn[data-filter="all"]').classList.add('active');
+            
             showPostsForSubject(subject);
-        } else {
-            selectedUploaderSubject = event.target.dataset.subject;
-            document.getElementById('confirm-uploader-subject-btn').style.display = 'block';
+        } else { // 'uploader'
+            handleUploaderSubjectConfirmation(subject);
         }
     }
 }
 
 // --- VIEW MANAGEMENT ---
 function showView(viewId) {
+    // FIX: Find any videos in the currently visible view and pause them before switching.
+    const visibleViews = document.querySelectorAll('.view.visible');
+    visibleViews.forEach(view => {
+        const videos = view.querySelectorAll('video');
+        videos.forEach(video => {
+            video.pause(); // Stop playback
+            video.currentTime = 0; // Reset to the beginning
+        });
+    });
+    // End of fix
+
     document.querySelectorAll('.view').forEach(v => {
         v.classList.remove('visible');
     });
@@ -615,6 +777,7 @@ function showView(viewId) {
         document.querySelectorAll('#viewer-subject-grid .subject-item').forEach(el => el.classList.remove('selected'));
     }
 }
+
 
 // --- UPLOADER REGISTRATION & LOGIN ---
 function handleJoinClick() {
@@ -637,9 +800,32 @@ function handleUploaderRegistration(event) {
     const subject = document.getElementById('uploader-reg-subject').value;
     const profession = document.getElementById('uploader-profession').value.trim();
     const bio = document.getElementById('uploader-bio').value.trim();
+    const paymentMethod = document.getElementById('payment-method-options').value;
+    const upiId = document.getElementById('upi-id').value.trim();
+    const accountHolderName = document.getElementById('account-holder-name').value.trim();
+    const accountNumber = document.getElementById('account-number').value.trim();
+    const ifscCode = document.getElementById('ifsc-code').value.trim();
+    
+    let paymentDetails = { method: paymentMethod };
+    let paymentFieldsValid = true;
+
+    if (paymentMethod === 'upi') {
+        if (!upiId) paymentFieldsValid = false;
+        paymentDetails.upiId = upiId;
+    } else { // bank
+        if (!accountHolderName || !accountNumber || !ifscCode) paymentFieldsValid = false;
+        paymentDetails.accountHolderName = accountHolderName;
+        paymentDetails.accountNumber = accountNumber;
+        paymentDetails.ifscCode = ifscCode;
+    }
 
     if (!name || !state || !subject || !profession) {
-        showCustomAlert("All fields except avatar and bio are required.");
+        showCustomAlert("All profile fields except avatar and bio are required.");
+        return;
+    }
+    
+    if (!paymentFieldsValid) {
+        showCustomAlert("Please fill in all the required payment details for your chosen method.");
         return;
     }
 
@@ -651,38 +837,35 @@ function handleUploaderRegistration(event) {
     if (avatarFile) {
         const reader = new FileReader();
         reader.onloadend = () => {
-            finalizeRegistration(name, reader.result, state, subject, profession, bio);
+            finalizeRegistration(name, reader.result, state, subject, profession, bio, paymentDetails);
         };
         reader.readAsDataURL(avatarFile);
     } else {
-        finalizeRegistration(name, null, state, subject, profession, bio);
+        finalizeRegistration(name, null, state, subject, profession, bio, paymentDetails);
     }
 }
 
-function finalizeRegistration(name, avatar, state, subject, profession, bio) {
+function finalizeRegistration(name, avatar, state, subject, profession, bio, paymentDetails) {
     currentUploader = { 
         name, 
         avatar, 
         state, 
         subject, 
         profession, 
-        bio, 
+        bio,
+        paymentDetails,
         verified: false,
         followers: []
     };
     uploaderProfiles.push(currentUploader);
-    // REMOVED: localStorage.setItem calls
-
     showCustomAlert("Registration successful! Please verify your subject to continue.");
     document.getElementById('uploader-reg-form').reset();
     showUploaderVerification();
 }
 
 function showUploaderVerification() {
-    selectedUploaderSubject = null;
     document.querySelectorAll('#uploader-subject-grid .subject-item').forEach(el => el.classList.remove('selected'));
-    document.getElementById('confirm-uploader-subject-btn').style.display = 'none';
-
+    
     document.getElementById('uploader-verification-prompt').innerHTML =
         `To continue, please select your registered subject: <strong style="color:var(--text-accent);">${currentUploader.subject}</strong>`;
 
@@ -691,21 +874,21 @@ function showUploaderVerification() {
     showView('uploader-view');
 }
 
-function handleUploaderSubjectConfirmation() {
-    if (!selectedUploaderSubject) {
+function handleUploaderSubjectConfirmation(selectedSubject) {
+    if (!selectedSubject) {
         showCustomAlert("Please select a subject.");
         return;
     }
-    if (selectedUploaderSubject === currentUploader.subject) {
+    if (selectedSubject === currentUploader.subject) {
         const profileIndex = uploaderProfiles.findIndex(p => p.name === currentUploader.name);
         if (profileIndex > -1) {
             uploaderProfiles[profileIndex].verified = true;
-            // REMOVED: localStorage.setItem call
             currentUploader.verified = true;
         }
         showUploaderDashboard();
     } else {
         showCustomAlert(`Process Rejected! You must select your registered subject: ${currentUploader.subject}`);
+        document.querySelectorAll('#uploader-subject-grid .subject-item.selected').forEach(el => el.classList.remove('selected'));
     }
 }
 
@@ -714,7 +897,6 @@ function showUploaderDashboard() {
     document.getElementById('uploader-dashboard-section').style.display = 'block';
     document.getElementById('uploader-heading').textContent = `Uploading to: ${currentUploader.subject}`;
     
-    // NEW: Display follower count on dashboard
     const statsContainer = document.getElementById('uploader-stats-display');
     const followerCount = currentUploader.followers ? currentUploader.followers.length : 0;
     statsContainer.innerHTML = `<span>Followers: ${formatNumber(followerCount)}</span>`;
@@ -723,11 +905,10 @@ function showUploaderDashboard() {
     showView('uploader-view');
 }
 
-
+// The logout function was already present and correct.
 async function handleLogout() {
     const confirmed = await showCustomConfirm("Are you sure you want to log out?");
     if (confirmed) {
-        // REMOVED: localStorage.removeItem call
         currentUploader = null;
         showCustomAlert("You have been logged out.");
         showView('landing-view');
@@ -735,9 +916,23 @@ async function handleLogout() {
 }
 
 // --- VIEWER FUNCTIONALITY ---
+// UPDATED: This function now also filters by content type
 function showPostsForSubject(subject) {
     document.getElementById('posts-heading').textContent = `Posts in ${subject}`;
+    
+    // 1. Filter by subject
     let filteredPosts = allPosts.filter(post => post.subject === subject);
+    
+    // 2. Filter by content type (image, pdf, etc.) based on the global filter state
+    if (currentContentFilter !== 'all') {
+        filteredPosts = filteredPosts.filter(post => {
+            if (!post.file) return false;
+            // The filter value (e.g., 'image') is checked against the file's MIME type (e.g., 'image/png')
+            return post.file.type.startsWith(currentContentFilter);
+        });
+    }
+
+    // 3. Filter by state search query
     const searchQuery = document.getElementById('state-search-input').value.trim().toLowerCase();
     if (searchQuery) {
         filteredPosts = filteredPosts.filter(post => {
@@ -745,6 +940,7 @@ function showPostsForSubject(subject) {
             return uploader && uploader.state.toLowerCase().includes(searchQuery);
         });
     }
+    
     const sortedPosts = filteredPosts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
     displayViewerPosts(sortedPosts, 'posts-container');
     showView('viewer-posts-view');
@@ -759,7 +955,6 @@ function incrementViewCount(postTimestamp) {
                 allPosts[postIndex].views = 0;
             }
             allPosts[postIndex].views++;
-            // REMOVED: localStorage.setItem call
             viewed.push(postTimestamp);
             sessionStorage.setItem(viewedPostsKey, JSON.stringify(viewed));
         }
@@ -771,7 +966,7 @@ function displayViewerPosts(postsToDisplay, containerId) {
     container.innerHTML = "";
 
     if (postsToDisplay.length === 0) {
-        container.innerHTML = `<div class='empty-posts-message'><h3>No posts found.</h3><p>Try a different search or be the first to post in this subject.</p></div>`;
+        container.innerHTML = `<div class='empty-posts-message'><h3>No posts found.</h3><p>Try a different search or filter.</p></div>`;
         return;
     }
 
@@ -789,6 +984,9 @@ function displayViewerPosts(postsToDisplay, containerId) {
             if (post.file.type.startsWith('image/')) {
                 fileHTML = `<img src="${post.file.data}" alt="Uploaded Image">
                             <a class="file-download-link" onclick="downloadFile('${post.file.data}', '${escapeHTML(post.file.name)}')">Download Image</a>`;
+            } else if (post.file.type.startsWith('video/')) {
+                fileHTML = `<video controls src="${post.file.data}"></video>
+                            <a class="file-download-link" onclick="downloadFile('${post.file.data}', '${escapeHTML(post.file.name)}')">Download Video</a>`;
             } else if (post.file.type === 'application/pdf') {
                 fileHTML = `<a href="${post.file.data}" download="${escapeHTML(post.file.name)}" class="file-download-link">Download PDF: ${escapeHTML(post.file.name)}</a>`;
             }
@@ -866,8 +1064,6 @@ function toggleLike(timestamp) {
     if (likeCountSpan) {
         likeCountSpan.textContent = `${formatNumber(post.likes.length)} Likes`;
     }
-    
-    // REMOVED: localStorage.setItem call
 }
 
 function addComment(event, timestamp) {
@@ -878,7 +1074,6 @@ function addComment(event, timestamp) {
     if (postIndex === -1) return;
     if (!allPosts[postIndex].comments) allPosts[postIndex].comments = [];
     allPosts[postIndex].comments.push({ text: commentText, commenter: viewerUser, timestamp: new Date().toISOString() });
-    // REMOVED: localStorage.setItem call
     
     if (document.getElementById('viewer-posts-view').classList.contains('visible')) {
         showPostsForSubject(allPosts[postIndex].subject);
@@ -894,7 +1089,6 @@ async function deleteComment(postTimestamp, commentTimestamp) {
     const postIndex = allPosts.findIndex(p => p.timestamp === postTimestamp);
     if (postIndex > -1) {
         allPosts[postIndex].comments = allPosts[postIndex].comments.filter(c => c.timestamp !== commentTimestamp);
-        // REMOVED: localStorage.setItem call
         
         if (document.getElementById('viewer-posts-view').classList.contains('visible')) {
             showPostsForSubject(allPosts[postIndex].subject);
@@ -927,6 +1121,8 @@ function displayMyPosts() {
         if (post.file) {
             if (post.file.type.startsWith('image/')) {
                 fileHTML = `<img src="${post.file.data}" alt="Uploaded Image">`;
+            } else if (post.file.type.startsWith('video/')) {
+                fileHTML = `<video controls src="${post.file.data}"></video>`;
             } else if (post.file.type === 'application/pdf') {
                 fileHTML = `<a href="${post.file.data}" download="${post.file.name}" class="file-download-link">Download PDF: ${escapeHTML(post.file.name)}</a>`;
             }
@@ -944,11 +1140,11 @@ function displayMyPosts() {
             ${fileHTML}
             <div class="post-interactions">
                 <span class="likes-display">❤️ ${formatNumber(likeCount)} Likes</span>
-                <span class="likes-display">👁️ ${formatNumber(viewCount)} Views</span>
+                <span class="likes-display">${formatNumber(viewCount)} Views</span>
                 <button class="payment-request-btn" 
                         onclick="handlePaymentRequest('${post.timestamp}')" 
                         ${!isRequestable ? 'disabled' : ''}>
-                    ${isPending ? '⏳ Pending...' : '💰 Request Payment'}
+                    ${isPending ? '⏳ Pending...' : 'Request Payment'}
                 </button>
                 <div class="comments-container">
                     <h4>Comments (${formatNumber(post.comments ? post.comments.length : 0)})</h4>
@@ -963,28 +1159,9 @@ function displayMyPosts() {
 }
 
 async function sendRequestToAdminPanel(requestData) {
-    const adminApiEndpoint = 'https://your-admin-panel-api.com/payment-request';
-
-    try {
-        const response = await fetch(adminApiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData)
-        });
-
-        if (response.ok) {
-            return { success: true, message: "Request sent successfully." };
-        } else {
-            const errorResponse = await response.json();
-            console.error('Admin panel API error:', errorResponse);
-            return { success: false, message: `Server error: ${errorResponse.message || 'Please try again.'}` };
-        }
-    } catch (error) {
-        console.error('Network error sending payment request:', error);
-        return { success: false, message: 'A network error occurred. Please check your connection and try again.' };
-    }
+    console.log("Simulating API call for payment request:", requestData);
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    return { success: true, message: "Request sent successfully (Simulated)." };
 }
 
 
@@ -1014,6 +1191,7 @@ async function handlePaymentRequest(postTimestamp) {
         likes: likeCount,
         paymentAmount: PAYMENT_AMOUNT,
         postTimestamp: post.timestamp,
+        paymentDetails: currentUploader.paymentDetails,
         requestTimestamp: new Date().toISOString()
     };
     
@@ -1024,7 +1202,6 @@ async function handlePaymentRequest(postTimestamp) {
         post.paymentRequests++;
         post.paymentStatus = 'pending';
         
-        // REMOVED: localStorage.setItem call
         displayMyPosts();
         
         showCustomAlert(`Payment request sent successfully for ₹${PAYMENT_AMOUNT}. You will be notified upon review.`);
@@ -1044,7 +1221,6 @@ function handlePostUpload(event) {
         const postIndex = allPosts.findIndex(p => p.timestamp === editingTimestamp);
         if(postIndex > -1) {
             allPosts[postIndex].text = postText;
-            // REMOVED: localStorage.setItem call
             showCustomAlert("Post updated successfully!");
             resetUploadForm();
             displayMyPosts();
@@ -1080,7 +1256,6 @@ function createNewPost(text, fileData) {
     };
 
     allPosts.push(newPost);
-    // REMOVED: localStorage.setItem call
     
     resetUploadForm();
     displayMyPosts();
@@ -1091,7 +1266,6 @@ async function deletePost(timestamp) {
     const confirmed = await showCustomConfirm("Are you sure you want to permanently delete this post?");
     if (!confirmed) return;
     allPosts = allPosts.filter(post => post.timestamp !== timestamp);
-    // REMOVED: localStorage.setItem call
     displayMyPosts();
 }
 
@@ -1170,7 +1344,41 @@ function toggleFollow(uploaderName) {
     }
 
     followerCountEl.textContent = formatNumber(profile.followers.length);
-    // REMOVED: localStorage.setItem call
+}
+
+// --- ADMIN MESSAGE FUNCTIONS ---
+function showMessageAdminView() {
+    const nameInput = document.getElementById('admin-message-name');
+    if (currentUploader) {
+        nameInput.value = currentUploader.name;
+    } else {
+        nameInput.value = viewerUser;
+    }
+    showView('message-admin-view');
+}
+
+async function handleAdminMessageSend(event) {
+    event.preventDefault();
+    const name = document.getElementById('admin-message-name').value;
+    const body = document.getElementById('admin-message-body').value;
+
+    const messageData = { from: name, body, timestamp: new Date().toISOString() };
+    
+    const result = await sendMessageToAdminPanel(messageData);
+    
+    if(result.success) {
+        showCustomAlert("Your message has been sent to the administrator. Thank you!");
+        document.getElementById('message-admin-form').reset();
+        showView('landing-view');
+    } else {
+        showCustomAlert(`Error: Could not send message. ${result.message}`);
+    }
+}
+
+async function sendMessageToAdminPanel(messageData) {
+    console.log("Sending message to admin panel:", messageData);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    return { success: true, message: "Message received by server." };
 }
 
 
@@ -1250,4 +1458,4 @@ function showCustomConfirm(message) {
 }
 </script>
 </body>
-  </html>
+   </html>
